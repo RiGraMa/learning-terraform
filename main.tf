@@ -83,26 +83,21 @@ module "blog_sg" {
 module "blog_alb" {
   source = "terraform-aws-modules/alb/aws"
 
-  name    = "blog_alb"
+  name    = "blog-alb"
   vpc_id  = module.blog_vpc.vpc_id
   subnets = module.blog_vpc.public_subnets
 
-  security_groups = [module.blog_sg.security_group_id]
-
-  
+  security_groups = [module.blog_sg.id]
 
   listeners = {
-    blof-http = {
+    blog-http = {
       port     = 80
       protocol = "HTTP"
       forward = {
-        target_group_arn = aws_alb_target_group.blog.arn
+        target_group_arn = aws_lb_target_group.blog.arn
       }
     }
-    
   }
-
-  
 
   tags = {
     Environment = "dev"
